@@ -1,0 +1,48 @@
+body {
+    background-color: #F4DFBA;
+    min-height: 100vh;
+}
+
+.section {
+    padding: 1rem 2rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+.title {
+    font-weight: 800;
+    font-size: 5rem;
+
+    font-family: 'Gamja Flower', cursive;
+}
+
+.subtitle {
+    font-size: 2rem;
+
+    font-family: 'Stylish', sans-serif;
+}
+
+.cafejoa {
+    color: #876445 !important;
+}
+
+.button.cafejoa {
+    background-color: #876445;
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.cafejoa.is-height {
+    margin-top: -10px;
+    margin-bottom: -5px;
+}
+
+.help {
+    color: gray;
+}
+
+.button:hover {
+    background-color: transparent;
+    border-color: #876445;
+    color: #876445 !important;
+}
