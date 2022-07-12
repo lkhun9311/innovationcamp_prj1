@@ -1,0 +1,12 @@
+.modal-content {
+    width: 600px;
+    max-width: 80%;
+}
+
+#modal-post > div.modal-content > div > article > div label {
+    margin-bottom: 0em;
+}
+
+#modal-post > div.modal-content > div > article > div .control{
+    margin: 10px 0px 0px 0px;
+}
