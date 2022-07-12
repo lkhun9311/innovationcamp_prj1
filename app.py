@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 SECRET_KEY = 'SPARTA'
 
 # mongoDB에 연결하려면 <id>와 <password> 입력 필요
-client = MongoClient('mongodb+srv://<id>:<password>@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017, username=<id>, password=<password>)
+client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017, username="test", password="dpfehfkeh11!")
 db = client.cafejoa
 
 

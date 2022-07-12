@@ -7,5 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 .idea/
-2022/.idea/
+/.idea/
 __pycache__
