@@ -1,0 +1,40 @@
+*{
+    margin: 0;
+    padding: 0px;
+    box-sizing : border-box;
+}
+html, body{
+    margin: 0;
+    height: 100%;
+    /*overflow: hidden;*/
+}
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none
+}
+.header{
+    height: 10%;
+    padding: 10px;
+    background-color: #876445;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #F4DFBA;
+    font-size: 1.5rem;
+}
+.main_page{
+    margin: 0 auto;
+    width: 90%;
+    height: 100%;
+    /*border: 1px solid black;*/
+}
+.add_button{
+    display: flex;
+    width: 100%;
+    /*background-color: green;*/
+    padding: 0 100px;
+}
