@@ -1,38 +1,122 @@
 <!doctype html>
 <html lang="en">
-    <head>
+<head>
 
-        <!-- Webpage Title -->
-        <title>{{ user_info.name }} | SWEETER</title>
+    <!-- Webpage Title -->
+    <title>카페조아</title>
 
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bulma CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <!-- Font Awesome CSS -->
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
 
-        <!-- JS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="{{ url_for('static', filename='user_js.js') }}"></script>
+</head>
+<section class="hero is-white">
+    <div class="hero-body" style="padding-bottom:1rem;margin:auto;min-width: 400px">
+        <article class="media">
 
+            <figure class="media-left" style="align-self: center">
+                <a class="image is-96x96" href="#">
+                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                </a>
+            </figure>
+            <div class="media-content">
+                <div class="content">
+                    <p class="cafejoa" style="margin: 35px 0px 0px 10px">
+                        <strong>{{ user_info.username }}</strong> <small>@{{ user_info.profile_name }}</small>
+{#                        <br>#}
+{#                        {{ user_info.profile_info }}#}
+                    </p>
+                </div>
 
-        <script>
-            function sign_out() {
-                $.removeCookie('mytoken', {path: '/'});
-                alert('로그아웃')
-                window.location.href = "/login"
-            }
-        </script>
+            </div>
+        </article>
+        <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
+            <a class="button level-item has-text-centered is-sparta cafejoa" aria-label="edit"
+               onclick='$("#modal-edit").addClass("is-active")'>
+                프로필 수정&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-check-square-o" aria-hidden="true"></i></span>
+            </a>
 
-    </head>
-    <body>
-        {% if status %}
-            내 프로필 페이지
-        {% else %}
-            다른 사람 프로필 페이지
-        {% endif %}
-    </body>
+            <a class="button level-item has-text-centered is-sparta is-outlined cafejoa" aria-label="logout"
+               onclick="sign_out()">
+                로그아웃&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-sign-out"
+                                                                     aria-hidden="true"></i></span>
+            </a>
+        </nav>
+        <div class="modal" id="modal-edit">
+            <div class="modal-background" onclick='$("#modal-edit").removeClass("is-active")'></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="field">
+                                <label class="label cafejoa" for="input-name">아이디</label>
+
+                                <p class="control">
+
+                                    <input id="input-name" class="input"
+                                           placeholder="변경할 아이디를 입력해주세요" value="{{ user_info.username }}">
+                                </p>
+                            </div>
+                            <div class="field">
+                                <label class="label cafejoa" for="input-pic">프로필 사진</label>
+
+                                <div class="control is-expanded">
+                                    <div class="file has-name">
+                                        <label class="file-label" style="width:100%">
+                                            <input id="input-pic" class="file-input" type="file"
+                                                   name="resume">
+                                            <span class="file-cta"><span class="file-icon"><i class="fa fa-picture-o cafejoa" aria-hidden="true"></i></span>
+                            </span>
+                                            <span id="file-name" class="file-name"
+                                                  style="width:100%;max-width:100%">{{ user_info.profile_pic }}</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label cafejoa" for="textarea-about">자기소개</label>
+
+                                <p class="control">
+
+                        <textarea id="textarea-about" class="textarea"
+                                  placeholder="본인을 소개해보세요">{{ user_info.profile_info }}</textarea>
+                                </p>
+                            </div>
+                            <nav class="level is-mobile">
+                                <div class="level-left">
+
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <a class="button cafejoa" onclick="update_profile()">완료</a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a class="button cafejoa"
+                                           onclick='$("#modal-edit").removeClass("is-active")'>닫기</a>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"
+                    onclick='$("#modal-edit").removeClass("is-active")'></button>
+        </div>
+    </div>
+</section>
 </html>
