@@ -89,7 +89,7 @@ def sign_up():
         "userrealname": userrealname_receive,                       # 유저 실제 이름
         "gender": gender_receive,                                   # 유저 성별
         "age": age_receive,                                         # 유저 나이
-        "profile_name": username_receive,                           # 프로필 이름 기본값은 아이디
+        "profile_name": userrealname_receive,                       # 프로필 이름 기본값은 유저 실제 이름
         "profile_pic": "",                                          # 프로필 사진 파일 이름
         "profile_pic_real": "profile_pics/profile_placeholder.png"  # 프로필 사진 기본 이미지
     }
