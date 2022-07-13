@@ -20,43 +20,32 @@
         <script type="text/javascript" src="../static/pagination_test.js"></script>
 <!-- Bulma CSS -->
     <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
     />
-    <!-- Font Awesome CSS -->
+<!-- Font Awesome CSS -->
     <link
-            href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-            rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
     />
     <link
-            href="{{ url_for('static', filename='mystyle.css') }}"
-            rel="stylesheet"
+      href="{{ url_for('static', filename='mystyle.css') }}"
+      rel="stylesheet"
     />
-    {# 삭제 후 alert message #}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <script>
-                    alert("{{ message }}")
-                </script>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-</head>
-<body>
+    </head>
+    <body>
 <!--헤더부분-->
-<header class="header">
-    <h1 class="title">
-        CAFE JOA
-    </h1>
-</header>
+    <header class="header">
+        <h1 class="title">
+            CAFE JOA
+        </h1>
+    </header>
 <!--모달-->
 {% include 'post_cafe_modal.html' %}
 {#{% include 'cafe_detail.html' %}#}
 
 
-<section class="main_page">
-
+    <section class="main_page">
 
 <!---->
         <div class="container">
@@ -78,31 +67,45 @@
                                 <img src="https://haieng.com/wp-content/uploads/2017/10/test-image-500x500-300x300.jpg" alt="Placeholder image">
         {#                    </figure>#}
                         </div>
-                        <div class="cafe_info">
-                            <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
-                            <p class="user_name">{{ cafe.username }}</p>
+                        <div class="card-summary">
+                            <div class="user_img">
+        {#                            <figure class="image is-48x48">#}
+                                    <img src="https://bulma.io/images/placeholders/48x48.png" alt="Placeholder image">
+        {#                            </figure>#}
+                            </div>
+                            <div class="cafe_info">
+                                <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
+                                <p class="user_name">{{cafe.username}}</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            {% endfor %}
+                  </div>
+              {% endfor %}
 
 
 
-            {# 페이지네이션 #}
+{# 페이지네이션 #}
+          </div>
+          <div class="pagination">
+              <li class="page-item previous-page disable"><a class="page-link" href="#">Prev</a></li>
+              <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item dots"><a class="page-link" href="#">...</a></li>
+              <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
+              <li class="page-item current-page"><a class="page-link" href="#">6</a></li>
+              <li class="page-item dots"><a class="page-link" href="#">...</a></li>
+              <li class="page-item current-page"><a class="page-link" href="#">10</a></li>
+              <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
         </div>
-        <div class="pagination">
-            <li class="page-item previous-page disable"><a class="page-link" href="#">Prev</a></li>
-            <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item dots"><a class="page-link" href="#">...</a></li>
-            <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
-            <li class="page-item current-page"><a class="page-link" href="#">6</a></li>
-            <li class="page-item dots"><a class="page-link" href="#">...</a></li>
-            <li class="page-item current-page"><a class="page-link" href="#">10</a></li>
-            <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
         </div>
-    </div>
 
 
-</section>
-</body>
+
+
+
+
+
+
+
+
+    </section>
+    </body>
 </html>
