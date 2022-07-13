@@ -5,6 +5,7 @@ import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from datetime import datetime, timedelta
 
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -13,7 +14,7 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 SECRET_KEY = 'SPARTA'
 
 # mongoDB에 연결하려면 <id>와 <password> 입력 필요
-client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017, username="test", password="dpfehfkeh11!")
+client = MongoClient('mongodb+srv://<아이디>:<비밀번호>!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017)
 db = client.cafejoa
 
 
@@ -66,7 +67,7 @@ def sign_in():
         }
         # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
         # 버전이 상향되어 .decode('utf-8') 생략 가능
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
@@ -114,34 +115,103 @@ def save_img():
         return redirect(url_for("home"))
 
 
-@app.route('/posting', methods=['POST'])
+@app.route('/postingCafe', methods=['POST'])
 def posting():
     token_receive = request.cookies.get('mytoken')
+
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅하기
+        user_info = db.users.find_one({"username": payload["id"]})
+        cafename_receive = request.form["cafename_give"]
+        cafeaddress_receive = request.form["cafeaddress_give"]
+        cafetel_receive = request.form["cafetel_give"]
+        cafeopenhours_receive = request.form["cafeopenhours_give"]
+        date_receive = request.form["date_give"]
+        doc = {
+            "username": user_info["username"], # 작성자
+            "cafe_name": cafename_receive, # 카페 이름
+            "cafe_address": cafeaddress_receive, # 카페 주소
+            "cafe_tel": cafetel_receive, # 카페 전화번호
+            "cafe_open_hours": cafeopenhours_receive, # 카페 운영시간
+            "cafe_image_pic": "", # 카페 이미지
+            "cafe_image_pic_real": "", # 카페 이미지 path
+            "date": date_receive # 포스팅 날짜
+        }
+        insert_one = db.cafes.insert_one(doc)
+        # print(insert_one._InsertOneResult__inserted_id) # 방금 저장된 id
+        # 게시글 id를 img 이름으로 저장하여 유일성 만족. (이미지 수정시 자동 덮어쓰기되어 수정)
+        cafe_image_name = insert_one._InsertOneResult__inserted_id
+
+        img_doc = {
+            "cafe_image_pic": "", # 카페 이미지
+            "cafe_image_pic_real": "", # 카페 이미지 path
+        }
+        # 카페 이미지 파일 존재시 처리
+        if 'cafeimage_give' in request.files:
+            file = request.files["cafeimage_give"]
+            print(file, file.filename)
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"cafe_image_pics/{cafe_image_name}.{extension}"
+            file.save("./static/" + file_path)
+            img_doc["cafe_image_pic"] = cafename_receive + "." + extension
+            img_doc["cafe_image_pic_real"] = file_path
+
+        # db에서 기존에 저장된 id값에 img 관련 수정
+        db.cafes.update_one({'_id': cafe_image_name}, {'$set':img_doc})
+
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
-@app.route("/get_posts", methods=['GET'])
-def get_posts():
+@app.route("/get/cafes", methods=['GET'])
+def get_cafes():
     token_receive = request.cookies.get('mytoken')
+    number = int(request.args.get("number"))
+    print(number)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다."})
+        cafes = list(db.cafes.find({}).sort("date", -1).limit(number))
+        # 포스팅 목록 받아오기
+        for cafe in cafes:
+            cafe["_id"] = str(cafe["_id"])
+            # 사진 관련 수정 필요
+            # 좋아요 하트 관련 추후 수정
+            # cafe["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            # cafe["heart_by_me"] = bool(
+            #     db.likes.find_one({"cafe_id": cafe["_id"], "type": "heart", "username": payload['id']}))
+
+        print(cafes)
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "cafes": cafes})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
-@app.route('/update_like', methods=['POST'])
-def update_like():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return jsonify({"result": "success", 'msg': 'updated'})
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
+# @app.route('/update_like', methods=['POST'])
+# def update_like():
+#     token_receive = request.cookies.get('mytoken')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         # 좋아요 수 변경
+#         user_info = db.users.find_one({"username": payload["id"]})
+#         post_id_receive = request.form["post_id_give"]
+#         type_receive = request.form["type_give"]
+#         action_receive = request.form["action_give"]
+#         doc = {
+#             "post_id": post_id_receive,
+#             "username": user_info["username"],
+#             "type": type_receive
+#         }
+#         if action_receive == "like":
+#             db.likes.insert_one(doc)
+#         else:
+#             db.likes.delete_one(doc)
+#         count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+#         return jsonify({"result": "success", 'msg': 'updated', "count": count})
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
 
 
 if __name__ == '__main__':
