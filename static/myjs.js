@@ -34,7 +34,7 @@ function post() {
         success: function (response) {
             $("#modal-post").removeClass("is-active")
             console.log(response["id"])
-            // window.location.reload()
+            window.location.reload()
         }
     })
 }
