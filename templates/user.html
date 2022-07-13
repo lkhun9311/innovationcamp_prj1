@@ -24,40 +24,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="{{ url_for('static', filename='user_js.js') }}"></script>
 </head>
-<section class="hero is-white">
+<section class="hero is-white" style="padding-bottom: 20px">
     <div class="hero-body" style="padding-bottom:1rem;margin:auto;min-width: 400px">
         <article class="media">
 
             <figure class="media-left" style="align-self: center">
-                <a class="image is-96x96" href="#">
-                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                <a class="image" href="#">
+                    <img class="is-rounded image is-96x96"
+                         src="{{ url_for('static', filename=user_info.profile_pic_default) }}">
                 </a>
             </figure>
             <div class="media-content">
                 <div class="content">
                     <p class="cafejoa" style="margin: 35px 0px 0px 10px">
-                        <strong>{{ user_info.username }}</strong> <small>@{{ user_info.profile_name }}</small>
-                        {#                        <br>#}
-                        {#                        {{ user_info.profile_info }}#}
+                        <strong id="userrealname">{{ user_info.userrealname }}</strong> <small>@{{ user_info.profile_name }}</small>
                     </p>
                 </div>
 
             </div>
         </article>
         {% if status %}
-        <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
-            <a class="button level-item has-text-centered is-sparta cafejoa" aria-label="edit"
-               onclick='$("#modal-edit").addClass("is-active")'>
-                프로필 수정&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-check-square-o"
-                                                                       aria-hidden="true"></i></span>
-            </a>
-
-            <a class="button level-item has-text-centered is-sparta is-outlined cafejoa" aria-label="logout"
-               onclick="sign_out()">
-                로그아웃&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-sign-out"
-                                                                     aria-hidden="true"></i></span>
-            </a>
-        </nav>
+            <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
+                <a class="button level-item has-text-centered cafejoa" aria-label="edit"
+                   onclick='$("#modal-edit").addClass("is-active")'>
+                    프로필 수정&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-check-square-o"
+                                                                           aria-hidden="true"></i></span>
+                </a>
+                <a class="button level-item has-text-centered cafejoa" aria-label="logout"
+                   onclick="sign_out()">
+                    로그아웃&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-sign-out"
+                                                                         aria-hidden="true"></i></span>
+                </a>
+            </nav>
+            <nav id="btns-me" class="level is-mobile" style="margin: -10px 0">
+            <a class="button level-item has-text-centered cafejoa" aria-label="logout"
+                   onclick="resign_user()">
+                    회원탈퇴&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-coffee" aria-hidden="true"></i></span>
+                </a>
+            </nav>
         {% endif %}
         <div class="modal" id="modal-edit">
             <div class="modal-background" onclick='$("#modal-edit").removeClass("is-active")'></div>
@@ -71,7 +75,7 @@
                                 <p class="control">
 
                                     <input id="input-name" class="input"
-                                           placeholder="변경할 아이디를 입력해주세요" value="{{ user_info.username }}">
+                                           placeholder="변경할 아이디를 입력해주세요" value="{{ user_info.profile_name }}">
                                 </p>
                             </div>
                             <div class="field">
@@ -117,7 +121,7 @@
 </section>
 <section>
     <div>
-        <p class="subtitle cafejoa mycafe">{{ user_info.username }}'s Cafe</p>
+        <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe</p>
     </div>
 </section>
 </html>
