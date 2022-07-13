@@ -37,7 +37,8 @@
             <div class="media-content">
                 <div class="content">
                     <p class="cafejoa" style="margin: 35px 0px 0px 10px">
-                        <strong id="userrealname">{{ user_info.userrealname }}</strong> <small>@{{ user_info.profile_name }}</small>
+                        <strong id="userrealname">{{ user_info.userrealname }}</strong>
+                        <small>@{{ user_info.profile_name }}</small>
                     </p>
                 </div>
 
@@ -57,9 +58,10 @@
                 </a>
             </nav>
             <nav id="btns-me" class="level is-mobile" style="margin: -10px 0">
-            <a class="button level-item has-text-centered cafejoa" aria-label="logout"
+                <a class="button level-item has-text-centered cafejoa" aria-label="logout"
                    onclick="resign_user()">
-                    회원탈퇴&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-coffee" aria-hidden="true"></i></span>
+                    회원탈퇴&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-coffee"
+                                                                         aria-hidden="true"></i></span>
                 </a>
             </nav>
         {% endif %}
