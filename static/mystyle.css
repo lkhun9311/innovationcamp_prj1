@@ -1,6 +1,11 @@
 .modal-content {
+    padding: 20px;
     width: 600px;
     max-width: 80%;
+    height: 1000px;
+}
+.modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 #modal-post > div.modal-content > div > article > div label {
