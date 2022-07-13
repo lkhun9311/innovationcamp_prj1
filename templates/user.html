@@ -17,6 +17,7 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='user_style.css') }}" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -36,17 +37,19 @@
                 <div class="content">
                     <p class="cafejoa" style="margin: 35px 0px 0px 10px">
                         <strong>{{ user_info.username }}</strong> <small>@{{ user_info.profile_name }}</small>
-{#                        <br>#}
-{#                        {{ user_info.profile_info }}#}
+                        {#                        <br>#}
+                        {#                        {{ user_info.profile_info }}#}
                     </p>
                 </div>
 
             </div>
         </article>
+        {% if status %}
         <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
             <a class="button level-item has-text-centered is-sparta cafejoa" aria-label="edit"
                onclick='$("#modal-edit").addClass("is-active")'>
-                프로필 수정&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-check-square-o" aria-hidden="true"></i></span>
+                프로필 수정&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-check-square-o"
+                                                                       aria-hidden="true"></i></span>
             </a>
 
             <a class="button level-item has-text-centered is-sparta is-outlined cafejoa" aria-label="logout"
@@ -55,6 +58,7 @@
                                                                      aria-hidden="true"></i></span>
             </a>
         </nav>
+        {% endif %}
         <div class="modal" id="modal-edit">
             <div class="modal-background" onclick='$("#modal-edit").removeClass("is-active")'></div>
             <div class="modal-content">
@@ -78,7 +82,8 @@
                                         <label class="file-label" style="width:100%">
                                             <input id="input-pic" class="file-input" type="file"
                                                    name="resume">
-                                            <span class="file-cta"><span class="file-icon"><i class="fa fa-picture-o cafejoa" aria-hidden="true"></i></span>
+                                            <span class="file-cta"><span class="file-icon"><i
+                                                    class="fa fa-picture-o cafejoa" aria-hidden="true"></i></span>
                             </span>
                                             <span id="file-name" class="file-name"
                                                   style="width:100%;max-width:100%">{{ user_info.profile_pic }}</span>
@@ -108,6 +113,11 @@
             <button class="modal-close is-large" aria-label="close"
                     onclick='$("#modal-edit").removeClass("is-active")'></button>
         </div>
+    </div>
+</section>
+<section>
+    <div>
+        <p class="subtitle cafejoa mycafe">{{ user_info.username }}'s Cafe</p>
     </div>
 </section>
 </html>
