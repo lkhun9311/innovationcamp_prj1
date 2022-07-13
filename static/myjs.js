@@ -1,3 +1,14 @@
+// 상시 제이쿼리
+$(function () {
+    // 모달 창에 이미지 파일 삽입되면 감지하는 이벤트 리스너
+    $('#input-pic').on("change", function (event) {
+        // 이미지 미리보기도 가능
+        $('#file-name').removeClass('is-hidden')
+        // console.log(event.target.files[0]) // file check
+        $('#file-name').text(event.target.files[0]["name"])
+    });
+});
+
 function post() {
     let cafeImage = $('#input-pic')[0].files[0]
     let cafeName = $("#cafeName").val()
@@ -23,6 +34,23 @@ function post() {
         success: function (response) {
             $("#modal-post").removeClass("is-active")
             window.location.reload()
+        }
+    })
+}
+
+function get_cafes(username) {
+    $("#card-box").empty()
+    if (username == undefined) {
+        username = ""
+    }
+    $.ajax({
+        type: "GET",
+        url: `/get/cafes`,
+        data: {},
+        success: function (response) {
+            if (response["result"] == "success") {
+                console.log(response["cafes"])
+            }
         }
     })
 }
