@@ -7,6 +7,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for, f
 from datetime import datetime, timedelta
 
 from werkzeug.utils import secure_filename
+import pafy
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -20,7 +21,6 @@ SECRET_KEY = 'SPARTA'
 client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017,
                      username="test", password="dpfehfkeh11!")
 db = client.cafejoa
-
 
 @app.route('/')
 def home():
@@ -39,26 +39,10 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
-
-
-@app.route('/user/<username>')
-def user(username):
-    # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
-
-        user_info = db.users.find_one({"username": username}, {"_id": False})
-        return render_template('user.html', user_info=user_info, status=status)
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
-
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -83,7 +67,6 @@ def sign_in():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
     username_receive = request.form['username_give']
@@ -106,13 +89,23 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
-
 @app.route('/sign_up/check_up', methods=['POST'])
 def check_up():
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
+@app.route('/user/<username>')
+def user(username):
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+
+        user_info = db.users.find_one({"username": username}, {"_id": False})
+        return render_template('user.html', user_info=user_info, status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 @app.route('/update_profile', methods=['POST'])
 def save_img():
@@ -137,7 +130,6 @@ def save_img():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
-
 @app.route('/user/<username>/resign', methods=['POST'])
 def resign_user(username):
     token_receive = request.cookies.get('mytoken')
@@ -148,7 +140,6 @@ def resign_user(username):
         return jsonify({"result": "success", 'msg': '회원탈퇴 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 @app.route('/postingCafe', methods=['POST'])
 def posting():
@@ -200,7 +191,6 @@ def posting():
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 @app.route("/get/cafes", methods=['GET'])
 def get_cafes():
@@ -327,6 +317,109 @@ def cafe_delete():
 #     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
 #         return redirect(url_for("home"))
 
+@app.route("/cafemusic/accept", methods=["POST"])
+def cafemusic_post():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # status = (username == payload["id"])
+        # user_info = db.users.find_one({"username": username}, {"_id": False})
+        username = payload["id"]
+
+        url_receive = request.form['url_give']
+        embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
+        video = pafy.new(url_receive)
+        title = video.title
+        view = video.viewcount
+        author = video.author
+        print(title, view, author)
+        doc = {
+            'username': username,
+            'embed': embed,
+            'url': url_receive,
+            'title': title,
+            'view': view,
+            'author': author
+        }
+        db.cafemusic.insert_one(doc)
+        # return render_template('index.html', user_info=user_info, status=status), jsonify({"result": "success", 'msg': 'cafe music 등록 완료'})
+        return jsonify({"result": "success", 'msg': 'cafe music 포스팅 완료'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+# @app.route("/cafemusic", methods=["POST"])
+# def cafemusic_post(username):
+#     url_receive = request.form['url_give']
+#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
+#     video = pafy.new(url_receive)
+#     title = video.title
+#     view = video.viewcount
+#     author = video.author
+#     print(title, view, author)
+#     doc={
+#         'username': username,
+#         'embed': embed,
+#         'url': url_receive,
+#         'title': title,
+#         'view': view,
+#         'author': author
+#     }
+#     db.music.insert_one(doc)
+#
+#     return jsonify({'msg':'노래 일기 기록 완료'})
+
+@app.route("/cafemusic/accept", methods=["GET"])
+def cafemusic_get():
+    cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
+    return jsonify({'cafemusic_list': cafemusic_list})
+
+# @app.route("/cafemusic/accept/<username>", methods=["GET"])
+# def music_fun():
+#     cafemusic_list = list(db.cafemusic.find({'username': payload["id"]}, {'_id': False}))
+#     return jsonify({'cafemusic_list': cafemusic_list})
+
+# @app.route("/cafemusic/accept/<username>", methods=["GET"])
+# def cafemusic_accept(username):
+#     token_receive = request.cookies.get('mytoken')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         username = payload["id"]
+#         cafemusic_list = list(db.cafemusic.find({'username': username}, {'_id': False}))
+#         return jsonify({"result": "success", "cafemusic_list": cafemusic_list})
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
+
+# @app.route("/cafemusic/accept", methods=["GET"])
+# def cafemusic_user_accept():
+#     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
+#     return jsonify({"result": "success", 'cafemusic_list': cafemusic_list})
+
+# @app.route("/music", methods=["POST"])
+# def music_post():
+#     url_receive = request.form['url_give']
+#     cate_receive = request.form['cate_give']
+#     comment_receive = request.form['comment_give']
+#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
+#     video = pafy.new(url_receive)
+#     title = video.title
+#     view = video.viewcount
+#     author = video.author
+#     print(title, view, author)
+#     doc={
+#         'embed':embed,
+#         'url':url_receive,
+#         'title':title,
+#         'view':view,
+#         'author':author
+#     }
+#     db.cafemusic.insert_one(doc)
+#
+#     return jsonify({'msg': 'cafe music 등록 완료'})
+#
+# @app.route("/music", methods=["GET"])
+# def music_get():
+#     music_list = list(db.cafemusic.find({}, {'_id': False}))
+#     return jsonify({'music_list':music_list})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
