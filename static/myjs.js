@@ -39,7 +39,7 @@ function post() {
     })
 }
 
-function get_cafes(username,number) {
+function get_cafes(username, number) {
     $("#card-box").empty()
     if (username == undefined) {
         username = ""
@@ -52,6 +52,37 @@ function get_cafes(username,number) {
             if (response["result"] == "success") {
                 console.log(response["cafes"])
             }
+        }
+    })
+}
+
+function cafe_update() {
+    let cafeImage = $('#input-pic')[0].files[0]
+    let cafe_id = $("#cafe_id").val()
+    let cafeName = $("#cafeName").val()
+    let cafeAddress = $("#cafeAddress").val()
+    let cafeTel = $("#cafeTel").val()
+    let cafeOpenHours = $("#textarea-post").val()
+    let today = new Date().toISOString()
+    let form_data = new FormData()
+    form_data.append("cafeid_give", cafe_id)
+    form_data.append("cafeimage_give", cafeImage)
+    form_data.append("cafename_give", cafeName)
+    form_data.append("cafeaddress_give", cafeAddress)
+    form_data.append("cafetel_give", cafeTel)
+    form_data.append("cafeopenhours_give", cafeOpenHours)
+    form_data.append("date_give", today)
+    console.log(form_data)
+    $.ajax({
+        type: "POST",
+        url: "/cafe/update",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response['msg'])
+            window.location.href = "/"
         }
     })
 }
