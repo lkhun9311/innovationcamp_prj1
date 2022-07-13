@@ -1,0 +1,54 @@
+[33mcommit ce78022c438fb4d46d1b4d0438dc61e30d4c1234[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Moveuk <v_donguk@naver.com>
+Date:   Tue Jul 12 21:56:46 2022 +0900
+
+    fix : main page modal 분리
+
+[33mcommit c043ee705b70c0b0cdc1a66aba7a88918334a08a[m
+Merge: 5416d30 2c67eb6
+Author: seokjun <sukjune96@gmail.com>
+Date:   Tue Jul 12 21:45:01 2022 +0900
+
+    Merge branch 'main' of https://github.com/lkhun9311/innovationcamp_prj1
+
+[33mcommit 5416d307e36716b2d59088dd672b4ca21a83fc9f[m
+Author: seokjun <sukjune96@gmail.com>
+Date:   Tue Jul 12 21:43:56 2022 +0900
+
+    fix: static 폴더 수정
+
+[33mcommit 2c67eb6a328564074767df90e03004185a75bbde[m
+Merge: b7afc72 68ffba1
+Author: seokJun <79635274+Seokjun7074@users.noreply.github.com>
+Date:   Tue Jul 12 21:36:27 2022 +0900
+
+    Merge pull request #2 from lkhun9311/develop_seokjun
+    
+    add: index페이지 생성
+
+[33mcommit 68ffba1b50c7ad884f5eee2337220ae1747ab8a3[m[33m ([m[1;31morigin/develop_seokjun[m[33m, [m[1;32mdevelop_seokjun[m[33m)[m
+Author: seokjun <sukjune96@gmail.com>
+Date:   Tue Jul 12 21:32:43 2022 +0900
+
+    add: index페이지 생성
+
+[33mcommit b7afc7255ea107b6d755039ae00538c9ccb11bc3[m
+Merge: b750a7c 98fb4bc
+Author: Moveuk <v_donguk@naver.com>
+Date:   Tue Jul 12 21:22:28 2022 +0900
+
+    Merge pull request #1 from lkhun9311/develop_moveuk
+    
+    add .gitignore
+
+[33mcommit 98fb4bca7750146abae2ae73c56794943f2e0383[m
+Author: Moveuk <v_donguk@naver.com>
+Date:   Tue Jul 12 21:21:26 2022 +0900
+
+    add .gitignore
+
+[33mcommit b750a7c81aedf452181faabf62e9854fa4bb216f[m
+Author: kwanghunlee <lkhun9311@naver.com>
+Date:   Tue Jul 12 21:12:09 2022 +0900
+
+    first commit
