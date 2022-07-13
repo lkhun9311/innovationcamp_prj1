@@ -74,14 +74,14 @@
                   <div class="card" id="{{ cafe._id }}" onclick='$("#{{ cafe._id }}").addClass("is-active")'>
                       <div class="card-image">
         {#                    <figure class="image is-4by3">#}
-                                <img src="https://haieng.com/wp-content/uploads/2017/10/test-image-500x500-300x300.jpg" alt="Placeholder image">
+                                <img src="/static/{{ cafe.cafe_image_pic_real }}" alt="Placeholder image">
         {#                    </figure>#}
                         </div>
                         <div class="card-summary">
                             <div class="user_img">
-        {#                            <figure class="image is-48x48">#}
-                                    <img src="https://bulma.io/images/placeholders/48x48.png" alt="Placeholder image">
-        {#                            </figure>#}
+                                    <figure class="image is-48x48">
+                                    <img src="/static/{{ cafe.profile_pic_real }}" alt="Placeholder image">
+                                    </figure>
                             </div>
                             <div class="cafe_info">
                                 <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
