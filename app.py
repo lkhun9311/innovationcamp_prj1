@@ -14,7 +14,8 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 SECRET_KEY = 'SPARTA'
 
 # mongoDB에 연결하려면 <id>와 <password> 입력 필요
-client = MongoClient('mongodb+srv://<아이디>:<비밀번호>!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017)
+# client = MongoClient('mongodb+srv://<아이디>:<비밀번호>!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017)
+client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017, username="test", password="dpfehfkeh11!")
 db = client.cafejoa
 
 
@@ -24,7 +25,11 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
-        return render_template('index.html')
+        cafes = list(db.cafes.find({}, {'id': False}))
+        print(cafes)
+        print(len(cafes))
+
+        return render_template('index.html',  cafes = cafes)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -62,8 +67,8 @@ def sign_in():
 
     if result is not None:
         payload = {
-         'id': username_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+            'id': username_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
         # 버전이 상향되어 .decode('utf-8') 생략 가능
@@ -85,14 +90,14 @@ def sign_up():
     # gender_receive = request.form['gender_option']
     gender_receive = request.form['gender_give']
     doc = {
-        "username": username_receive,                               # 아이디
-        "password": password_hash,                                  # 비밀번호
-        "userrealname": userrealname_receive,                       # 유저 실제 이름
-        "gender": gender_receive,                                   # 유저 성별
-        "age": age_receive,                                         # 유저 나이
-        "profile_name": userrealname_receive,                       # 프로필 이름 기본값은 유저 실제 이름
-        "profile_pic": "",                                          # 프로필 사진 파일 이름
-        "profile_pic_real": "profile_pics/profile_placeholder.png"  # 프로필 사진 기본 이미지
+        "username": username_receive,  # 아이디
+        "password": password_hash,  # 비밀번호
+        "userrealname": userrealname_receive,  # 유저 실제 이름
+        "gender": gender_receive,  # 유저 성별
+        "age": age_receive,  # 유저 나이
+        "profile_name": username_receive,  # 프로필 이름 기본값은 유저 아이디
+        "profile_pic": "",  # 프로필 사진 파일 이름
+        "profile_pic_default": "profile_pics/profile_placeholder.png"  # 프로필 사진 기본 이미지
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -110,9 +115,24 @@ def save_img():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
+        username = payload["id"]
+        name_receive = request.form["name_give"]
+        new_doc = {
+            "profile_name": name_receive
+        }
+        if 'file_give' in request.files:
+            file = request.files["file_give"]
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"profile_pics/{username}.{extension}"
+            file.save("./static/" + file_path)
+            new_doc["profile_pic"] = filename
+            new_doc["profile_pic_default"] = file_path
+        db.users.update_one({'username': payload['id']}, {'$set': new_doc})
+        return jsonify({"result": "success", 'msg': '프로필 수정 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route('/user/<username>/resign', methods=['POST'])
 def resign_user(username):
@@ -124,6 +144,7 @@ def resign_user(username):
         return jsonify({"result": "success", 'msg': '회원탈퇴 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route('/postingCafe', methods=['POST'])
 def posting():
@@ -139,14 +160,14 @@ def posting():
         cafeopenhours_receive = request.form["cafeopenhours_give"]
         date_receive = request.form["date_give"]
         doc = {
-            "username": user_info["username"], # 작성자
-            "cafe_name": cafename_receive, # 카페 이름
-            "cafe_address": cafeaddress_receive, # 카페 주소
-            "cafe_tel": cafetel_receive, # 카페 전화번호
-            "cafe_open_hours": cafeopenhours_receive, # 카페 운영시간
-            "cafe_image_pic": "", # 카페 이미지
-            "cafe_image_pic_real": "", # 카페 이미지 path
-            "date": date_receive # 포스팅 날짜
+            "username": user_info["username"],  # 작성자
+            "cafe_name": cafename_receive,  # 카페 이름
+            "cafe_address": cafeaddress_receive,  # 카페 주소
+            "cafe_tel": cafetel_receive,  # 카페 전화번호
+            "cafe_open_hours": cafeopenhours_receive,  # 카페 운영시간
+            "cafe_image_pic": "",  # 카페 이미지
+            "cafe_image_pic_real": "",  # 카페 이미지 path
+            "date": date_receive  # 포스팅 날짜
         }
         insert_one = db.cafes.insert_one(doc)
         # print(insert_one._InsertOneResult__inserted_id) # 방금 저장된 id
@@ -154,8 +175,8 @@ def posting():
         cafe_image_name = insert_one._InsertOneResult__inserted_id
 
         img_doc = {
-            "cafe_image_pic": "", # 카페 이미지
-            "cafe_image_pic_real": "", # 카페 이미지 path
+            "cafe_image_pic": "",  # 카페 이미지
+            "cafe_image_pic_real": "",  # 카페 이미지 path
         }
         # 카페 이미지 파일 존재시 처리
         if 'cafeimage_give' in request.files:
@@ -169,7 +190,7 @@ def posting():
             img_doc["cafe_image_pic_real"] = file_path
 
         # db에서 기존에 저장된 id값에 img 관련 수정
-        db.cafes.update_one({'_id': cafe_image_name}, {'$set':img_doc})
+        db.cafes.update_one({'_id': cafe_image_name}, {'$set': img_doc})
 
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
