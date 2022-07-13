@@ -6,6 +6,10 @@
         <title>cafejoa</title>
 
 <!--  css 불러오기-->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com" rel="preconnect">
+        <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
         <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="../static/index_style.css" />
         <link rel="stylesheet" href="../static/pagination_style.css">
@@ -45,23 +49,29 @@
     </head>
     <body>
 <!--헤더부분-->
-    <header class="header">
-        <h1 class="title">
-            CAFE JOA
-        </h1>
-    </header>
-<!--모달-->
+{#    <header class="header">#}
+{#        <h1 class="title">#}
+{#            CAFE JOA#}
+{#        </h1>#}
+{#    </header>#}
+<header class="index_header">
+    <h1 class="header_title">카페조아</h1>
+    <h3 class="header_subtitle">카페에 답이 있다</h3>
+{#    <span>{{ user_info.username }}님 환영합니다</span>#}
+</header>
+<!--카페작성 모달-->
 {% include 'post_cafe_modal.html' %}
-{#{% include 'cafe_detail.html' %}#}
-
-
+{# 몸통 #}
     <section class="main_page">
-
-<!---->
         <div class="container">
+        {% if user_info.username %}
+          <span class="opening_message">{{ user_info.username }}님 환영합니다</span>
+        {% else %}
+          <span class="opening_message">로그인해주세요</span>
+        {% endif %}
           <div class="add_button">
               <i
-                class="fa fa-plus"
+                class="fa fa-pencil"
                 aria-hidden="true"
                 onclick='$("#modal-post").addClass("is-active")'
               ></i>
@@ -73,15 +83,11 @@
                   {% include 'cafe_detail.html' %}
                   <div class="card" id="{{ cafe._id }}" onclick='$("#{{ cafe._id }}").addClass("is-active")'>
                       <div class="card-image">
-        {#                    <figure class="image is-4by3">#}
-                                <img src="/static/{{ cafe.cafe_image_pic_real }}" alt="Placeholder image">
-        {#                    </figure>#}
+                                <img src="" onerror="this.src='/static/default.jpg'">
                         </div>
-                        <div class="card-summary">
+                        <div class="card_summary">
                             <div class="user_img">
-                                    <figure class="image is-48x48">
-                                    <img src="/static/{{ cafe.profile_pic_real }}" alt="Placeholder image">
-                                    </figure>
+                                    <img src="" onerror="this.src='/static/profile_pics/profile_placeholder.png'">
                             </div>
                             <div class="cafe_info">
                                 <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
@@ -90,9 +96,6 @@
                         </div>
                   </div>
               {% endfor %}
-
-
-
 {# 페이지네이션 #}
           </div>
           <div class="pagination">
@@ -106,16 +109,6 @@
               <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
         </div>
         </div>
-
-
-
-
-
-
-
-
-
-
     </section>
     </body>
 </html>

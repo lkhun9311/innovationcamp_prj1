@@ -17,6 +17,8 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="../static/index_style.css" />
+
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -24,12 +26,16 @@
     <script src="{{ url_for('static', filename='login_js.js') }}"></script>
 </head>
 <body>
-<section class="hero is-white">
-    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-        <h1 class="title cafejoa">카페조아</h1>
-        <h3 class="subtitle cafejoa">카페에 답이 있다</h3>
-    </div>
-</section>
+<header class="index_header">
+    <h1 class="header_title">카페조아</h1>
+    <h3 class="header_subtitle">카페에 답이 있다</h3>
+</header>
+{#<section class="hero is-white">#}
+{#    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">#}
+{#        <h1 class="title cafejoa">카페조아</h1>#}
+{#        <h3 class="subtitle cafejoa">카페에 답이 있다</h3>#}
+{#    </div>#}
+{#</section>#}
 <section class="section">
     <div class="container">
         <div class="box" style="max-width: 480px;margin:auto">
