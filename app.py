@@ -171,6 +171,7 @@ def posting():
             "cafe_open_hours": cafeopenhours_receive,  # 카페 운영시간
             "cafe_image_pic": "",  # 카페 이미지
             "cafe_image_pic_real": "",  # 카페 이미지 path
+            "profile_pic_real": user_info["profile_pic_real"],  # 사용자 이미지 path
             "date": date_receive  # 포스팅 날짜
         }
         insert_one = db.cafes.insert_one(doc)
@@ -243,6 +244,7 @@ def cafe_update_post():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
         cafe_id = request.form["cafeid_give"]
         cafename_receive = request.form["cafename_give"]
         cafeaddress_receive = request.form["cafeaddress_give"]
@@ -254,6 +256,7 @@ def cafe_update_post():
             "cafe_address": cafeaddress_receive,  # 카페 주소
             "cafe_tel": cafetel_receive,  # 카페 전화번호
             "cafe_open_hours": cafeopenhours_receive,  # 카페 운영시간
+            "profile_pic_real": user_info["profile_pic_real"],  # 사용자 이미지 path
             "date": date_receive  # 포스팅 날짜
         }
         # 카페 이미지 파일 존재시 처리
