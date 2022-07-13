@@ -32,6 +32,16 @@
       href="{{ url_for('static', filename='mystyle.css') }}"
       rel="stylesheet"
     />
+    {# 삭제 후 alert message #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <script>
+                    alert("{{ message }}")
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     </head>
     <body>
 <!--헤더부분-->

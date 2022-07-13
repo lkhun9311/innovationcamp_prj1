@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import jwt
 import datetime
 import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from datetime import datetime, timedelta
 
 from werkzeug.utils import secure_filename
@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
+app.secret_key = 'SPARTA'
 
 SECRET_KEY = 'SPARTA'
 
@@ -269,6 +270,31 @@ def cafe_update_post():
         db.cafes.update_one({'_id': ObjectId(cafe_id)}, {'$set': doc})
 
         return jsonify({"result": "success", 'msg': '카페 수정 성공'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/cafe/delete", methods=['get'])
+def cafe_delete():
+    token_receive = request.cookies.get('mytoken')
+    cafe_id = request.args.get("cafe_id")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        username_token = user_info["username"]
+        cafe_info = db.cafes.find_one({'_id': ObjectId(cafe_id)})
+        username_post = cafe_info["username"]
+
+        # token으로 조회한 username과 글 id로 조회한 username이 같을 때 삭제
+        if username_token == username_post:
+            print("삭제 성공")
+            db.cafes.delete_one({'_id': ObjectId(cafe_id)})
+        else:
+            flash('카페 삭제 실패')
+            return redirect(url_for("home"))
+
+        flash('카페 삭제 성공')
+        return redirect(url_for("home"))
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
