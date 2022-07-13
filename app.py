@@ -289,6 +289,9 @@ def cafe_delete():
         if username_token == username_post:
             print("삭제 성공")
             db.cafes.delete_one({'_id': ObjectId(cafe_id)})
+        else:
+            flash('카페 삭제 실패')
+            return redirect(url_for("home"))
 
         flash('카페 삭제 성공')
         return redirect(url_for("home"))
