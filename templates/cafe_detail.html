@@ -1,38 +1,46 @@
 <div class="modal" id="{{ cafe._id }}">
-  <div
-    class="modal-background"
-    onclick='$("#{{ cafe._id }}").removeClass("is-active")'
-  ></div>
-  <div class="modal-content">
-    <div class="box">
-      <article class="media">
-        <div class="media-content">
-            <h1 class="post_cafe_header">Cafe Post</h1>
-            <hr class="draw_line">
-            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+    <div
+            class="modal-background"
+            onclick='$("#{{ cafe._id }}").removeClass("is-active")'
+    ></div>
+    <div class="modal-content">
+        <div class="box">
+            <div class="cafe_content">
+                <article class="">
+                    <div class="media-content">
+                        <h1 class="post_cafe_header">Cafe Post</h1>
+                        <hr class="draw_line">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
 
-          <h1>카페명: {{ cafe.cafe_name }}</h1>
-          <h1>주소: {{ cafe.cafe_address }}</h1>
-          <h1>전화번호: {{ cafe.cafe_tel }}</h1>
-          <h1>오픈시간: {{ cafe.cafe_open_hours }}</h1>
-            <div class="button_container">
-                <a href=/cafe/update?cafe_id={{ cafe._id }}>
-                    <button class="button is-success">수정하기</button>
-                </a>
-              <button class="button is-danger">삭제하기</button>
+                        <h1>카페명: {{ cafe.cafe_name }}</h1>
+                        <h1>주소: {{ cafe.cafe_address }}</h1>
+                        <h1>전화번호: {{ cafe.cafe_tel }}</h1>
+                        <h1>오픈시간: {{ cafe.cafe_open_hours }}</h1>
+                    </div>
+                </article>
             </div>
+            <footer class="card-footer main_detail">
+                {% if user_info.username==cafe.username %}
+                    <a href="/cafe/update?cafe_id={{ cafe._id }}" class="card-footer-item">Edit</a>
+                    <a href="/cafe/delete?cafe_id={{ cafe._id }}" class="card-footer-item">Delete</a>
+                {% endif %}
+                <a class="level-item is-sparta card-footer-item" aria-label="heart" onclick="toggle_like('', 'heart')">
+                    <span class="icon is-small">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </span>
+                        &nbsp;
+                    <span class="like-num">2.7k</span>
+                </a>
+            </footer>
         </div>
-      </article>
     </div>
-  </div>
-  <button
-    class="modal-close is-large"
-    aria-label="close"
-    onclick='$("#{{ cafe._id }}").removeClass("is-active")'
-  ></button>
+    <button
+            class="modal-close is-large"
+            aria-label="close"
+            onclick='$("#{{ cafe._id }}").removeClass("is-active")'
+    ></button>
 </div>
 {#  post_cafe_  #}
-
 
 
 {#<div class="modal" id="{{ cafe._id }}">#}
