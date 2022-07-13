@@ -1,0 +1,22 @@
+.modal-content{
+    scrollbar-width: none;
+}
+.post_cafe_header{
+    font-size: 24px;
+    font-weight: bold;
+    /*margin-bottom: 10px;*/
+}
+.draw_line{
+    margin: 10px 0px 20px 0px;
+    background-color: grey;
+    height: 3px;
+}
+.button_container{
+    padding-top:20px;
+    display: flex;
+    justify-content: space-around;
+}
+button is-dark{
+    background-color: #F4DFBA;
+
+}

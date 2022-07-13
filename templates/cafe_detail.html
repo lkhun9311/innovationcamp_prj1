@@ -1,0 +1,69 @@
+<div class="modal" id="{{ cafe._id }}">
+    <div
+            class="modal-background"
+            onclick='$("#{{ cafe._id }}").removeClass("is-active")'
+    ></div>
+    <div class="modal-content">
+        <div class="box">
+            <div class="cafe_header">
+                <div class="media-content">
+                    <h1 class="post_cafe_header">Cafe Post</h1>
+                    <hr class="draw_line">
+                    <figure class="image main_detail_content">
+                        <img src="/static/{{ cafe.cafe_image_pic_real }}"
+                             alt="Placeholder image">
+                    </figure>
+            </div>
+            <div class="cafe_content">
+                    <div>
+                        <div class="field">
+                            <label class="label">카페 이름</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_name }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 주소</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_address }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 전화번호</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_tel }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 정보</label>
+                            <div class="control">
+                                <textarea class="textarea" placeholder="Textarea" readonly>{{ cafe.cafe_open_hours }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer main_detail_footer">
+                {% if user_info.username==cafe.username %}
+                    <a href="/cafe/update?cafe_id={{ cafe._id }}" class="card-footer-item">Edit</a>
+                    <a href="/cafe/delete?cafe_id={{ cafe._id }}" class="card-footer-item">Delete</a>
+                {% endif %}
+                <a class="level-item is-sparta card-footer-item" aria-label="heart" onclick="toggle_like('', 'heart')">
+                    <span class="icon is-small">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </span>
+                    &nbsp;
+                    <span class="like-num">2.7k</span>
+                </a>
+            </footer>
+        </div>
+    </div>
+    <button
+            class="modal-close is-large"
+            aria-label="close"
+            onclick='$("#{{ cafe._id }}").removeClass("is-active")'
+    ></button>
+</div>

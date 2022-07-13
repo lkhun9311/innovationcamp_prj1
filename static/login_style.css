@@ -1,12 +1,13 @@
 body {
     background-color: #F4DFBA;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .section {
     padding: 1rem 2rem;
     max-width: 800px;
     margin: auto;
+    /*background-color: green;*/
 }
 
 .title {
