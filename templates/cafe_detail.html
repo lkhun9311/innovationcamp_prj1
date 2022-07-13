@@ -5,21 +5,48 @@
     ></div>
     <div class="modal-content">
         <div class="box">
-            <div class="cafe_content">
-                <article class="">
-                    <div class="media-content">
-                        <h1 class="post_cafe_header">Cafe Post</h1>
-                        <hr class="draw_line">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-
-                        <h1>카페명: {{ cafe.cafe_name }}</h1>
-                        <h1>주소: {{ cafe.cafe_address }}</h1>
-                        <h1>전화번호: {{ cafe.cafe_tel }}</h1>
-                        <h1>오픈시간: {{ cafe.cafe_open_hours }}</h1>
-                    </div>
-                </article>
+            <div class="cafe_header">
+                <div class="media-content">
+                    <h1 class="post_cafe_header">Cafe Post</h1>
+                    <hr class="draw_line">
+                    <figure class="image main_detail_content">
+                        <img src="/static/{{ cafe.cafe_image_pic_real }}"
+                             alt="Placeholder image">
+                    </figure>
             </div>
-            <footer class="card-footer main_detail">
+            <div class="cafe_content">
+                    <div>
+                        <div class="field">
+                            <label class="label">카페 이름</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_name }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 주소</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_address }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 전화번호</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Text input"
+                                       value="{{ cafe.cafe_tel }}" readonly>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">카페 정보</label>
+                            <div class="control">
+                                <textarea class="textarea" placeholder="Textarea" readonly>{{ cafe.cafe_open_hours }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer main_detail_footer">
                 {% if user_info.username==cafe.username %}
                     <a href="/cafe/update?cafe_id={{ cafe._id }}" class="card-footer-item">Edit</a>
                     <a href="/cafe/delete?cafe_id={{ cafe._id }}" class="card-footer-item">Delete</a>
@@ -28,7 +55,7 @@
                     <span class="icon is-small">
                         <i class="fa fa-heart" aria-hidden="true"></i>
                     </span>
-                        &nbsp;
+                    &nbsp;
                     <span class="like-num">2.7k</span>
                 </a>
             </footer>
@@ -40,39 +67,3 @@
             onclick='$("#{{ cafe._id }}").removeClass("is-active")'
     ></button>
 </div>
-{#  post_cafe_  #}
-
-
-{#<div class="modal" id="{{ cafe._id }}">#}
-{#    <div class="modal-background" onclick='$("#{{ cafe._id }}").removeClass("is-active")'></div>#}
-{#    #}
-{##}
-{#    <div class="modal-content">#}
-{#        <div class="card">#}
-{#            <header class="card-header">#}
-{#                <p class="card-header-title">#}
-{#                    Cafe Post#}
-{#                </p>#}
-{#            </header>#}
-{#            <div class="card-content">#}
-{#                <div class="content">#}
-{##}
-{#                    <figure class="image is-1280x960">#}
-{#                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">#}
-{#                    </figure>#}
-{##}
-{#                    content#}
-{##}
-{#                    <br>#}
-{#                    <time datetime="2016-1-1">시간 함수 몇분전</time>#}
-{#                </div>#}
-{#            </div>#}
-{#            <footer class="card-footer">#}
-{#                <a href="#" class="card-footer-item">Edit</a>#}
-{#                <a href="#" class="card-footer-item">Delete</a>#}
-{#            </footer>#}
-{#        </div>#}
-{#    </div>#}
-{#    <button class="modal-close is-large" aria-label="close"#}
-{#            onclick='$("#{{ cafe._id }}").removeClass("is-active")'></button>#}
-{#</div>#}

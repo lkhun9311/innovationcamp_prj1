@@ -7,10 +7,14 @@
     margin-bottom: 0em;
 }
 
-#modal-post > div.modal-content > div > article > div .control{
+#modal-post > div.modal-content > div > article > div .control {
     margin: 10px 0px 0px 0px;
 }
 
-.main_detail {
+.main_detail_content {
+    justify-content: center;
+}
+
+.main_detail_footer {
     justify-content: end;
 }
