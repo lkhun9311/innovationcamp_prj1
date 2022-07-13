@@ -1,3 +1,4 @@
+from bson import ObjectId
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -15,7 +16,8 @@ SECRET_KEY = 'SPARTA'
 
 # mongoDB에 연결하려면 <id>와 <password> 입력 필요
 # client = MongoClient('mongodb+srv://<아이디>:<비밀번호>!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017)
-client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017, username="test", password="dpfehfkeh11!")
+client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.net/?retryWrites=true&w=majority', 27017,
+                     username="test", password="dpfehfkeh11!")
 db = client.cafejoa
 
 
@@ -29,7 +31,7 @@ def home():
         print(cafes)
         print(len(cafes))
 
-        return render_template('index.html',  cafes = cafes)
+        return render_template('index.html', cafes=cafes)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -216,6 +218,57 @@ def get_cafes():
 
         print(cafes)
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "cafes": cafes})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/cafe/update", methods=['GET'])
+def cafe_update():
+    token_receive = request.cookies.get('mytoken')
+    cafe_id = request.args.get("cafe_id")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        cafe = db.cafes.find_one({"_id": ObjectId(cafe_id)})
+
+        return render_template('update_cafe.html', user_info=user_info, cafe=cafe)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/cafe/update", methods=['POST'])
+def cafe_update_post():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        cafe_id = request.form["cafeid_give"]
+        cafename_receive = request.form["cafename_give"]
+        cafeaddress_receive = request.form["cafeaddress_give"]
+        cafetel_receive = request.form["cafetel_give"]
+        cafeopenhours_receive = request.form["cafeopenhours_give"]
+        date_receive = request.form["date_give"]
+        doc = {
+            "cafe_name": cafename_receive,  # 카페 이름
+            "cafe_address": cafeaddress_receive,  # 카페 주소
+            "cafe_tel": cafetel_receive,  # 카페 전화번호
+            "cafe_open_hours": cafeopenhours_receive,  # 카페 운영시간
+            "date": date_receive  # 포스팅 날짜
+        }
+        # 카페 이미지 파일 존재시 처리
+        if 'cafeimage_give' in request.files:
+            file = request.files["cafeimage_give"]
+            print(file, file.filename)
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"cafe_image_pics/{cafe_id}.{extension}"
+            file.save("./static/" + file_path)
+            doc["cafe_image_pic"] = cafename_receive + "." + extension
+            doc["cafe_image_pic_real"] = file_path
+
+        # 수정하기
+        db.cafes.update_one({'_id': ObjectId(cafe_id)}, {'$set': doc})
+
+        return jsonify({"result": "success", 'msg': '카페 수정 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
