@@ -114,6 +114,16 @@ def save_img():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+@app.route('/user/<username>/resign', methods=['POST'])
+def resign_user(username):
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        username = payload["id"]
+        db.users.delete_one({'username': username})
+        return jsonify({"result": "success", 'msg': '회원탈퇴 완료'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 @app.route('/postingCafe', methods=['POST'])
 def posting():
