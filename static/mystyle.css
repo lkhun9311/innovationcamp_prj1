@@ -1,12 +1,25 @@
 .modal-content {
+    padding: 20px;
     width: 600px;
     max-width: 80%;
+    height: 1000px;
+}
+.modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 #modal-post > div.modal-content > div > article > div label {
     margin-bottom: 0em;
 }
 
-#modal-post > div.modal-content > div > article > div .control{
+#modal-post > div.modal-content > div > article > div .control {
     margin: 10px 0px 0px 0px;
+}
+
+.main_detail_content {
+    justify-content: center;
+}
+
+.main_detail_footer {
+    justify-content: end;
 }

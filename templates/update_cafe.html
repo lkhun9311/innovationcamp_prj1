@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>cafejoa</title>
+
+    <!--  css 불러오기-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
+{#    <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">#}
+    <link rel="stylesheet" href="../static/index_style.css"/>
+{#    <link rel="stylesheet" href="../static/pagination_style.css">#}
+{#    <link rel="stylesheet" href="../static/post_cafe_modal_style.css">#}
+
+    <!--    js    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='myjs.js') }}"></script>
+
+{#    <!--페이지네이션 js분리-->#}
+{#    <script type="text/javascript" src="../static/pagination_test.js"></script>#}
+    <!-- Bulma CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+    <!-- Font Awesome CSS -->
+    <link
+            href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
+    />
+    <link
+            href="{{ url_for('static', filename='mystyle.css') }}"
+            rel="stylesheet"
+    />
+</head>
+<body>
+<!--헤더부분-->
+<header class="index_header">
+    <h1 class="header_title">카페조아</h1>
+    <h3 class="header_subtitle">카페에 답이 있다</h3>
+</header>
+<div class="modal-content">
+{#    <div class="box">#}
+{#        <article class="media">#}
+            <div class="update_container">
+                <div class="update_img_container" >
+                    <img class="update_img" src="/static/{{ cafe.cafe_image_pic_real }}"  onerror="this.src='/static/default.jpg'">
+                </div>
+                <div class="file">
+                    <label class="file-label">
+                        <input
+                                id="input-pic"
+                                class="file-input"
+                                type="file"
+                                name="resume"
+                        />
+                        <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fa fa-upload" aria-hidden="true"></i>
+                </span>
+                <span class="file-label"> Choose a file… </span>
+              </span>
+                <span id="file-name" class="file-name">{{ cafe.cafe_image_pic }}</span>
+              </span>
+                    </label>
+                </div>
+                <!--update content-->
+                <div class="control">
+                    <input
+                            id="cafe_id"
+                            class="input is-hovered"
+                            type="hidden"
+                            value="{{ cafe._id }}"
+                    />
+                </div>
+                <div class="control">
+                    <label class="label">카페 이름</label>
+                    <input
+                            id="cafeName"
+                            class="input is-hovered"
+                            type="text"
+                            placeholder="카페 이름"
+                            value="{{ cafe.cafe_name }}"
+                    />
+                </div>
+                <div class="control">
+                    <label class="label">카페 주소</label>
+                    <input
+                            id="cafeAddress"
+                            class="input is-hovered"
+                            type="text"
+                            placeholder="카페 주소"
+                            value="{{ cafe.cafe_address }}"
+                    />
+                </div>
+                <div class="control">
+                    <label class="label">카페 전화번호</label>
+                    <input
+                            id="cafeTel"
+                            class="input is-hovered"
+                            type="text"
+                            placeholder="카페 전화번호"
+                            value="{{ cafe.cafe_tel }}"
+                    />
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <label class="label">카페 정보</label>
+                        <textarea
+                                id="textarea-post"
+                                class="textarea"
+                                placeholder="카페 정보"
+                        >{{ cafe.cafe_open_hours }}</textarea>
+                    </p>
+                </div>
+                <!--modal nav바-->
+                <nav class="level is-mobile">
+                    <div class="level-left"></div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <a class="button is-sparta" onclick="cafe_update()">업데이트</a>
+                        </div>
+                        <div class="level-item">
+                            <a
+                                    class="button is-sparta is-outlined"
+                                    onclick='history.back()'
+                            >취소</a
+                            >
+                        </div>
+                    </div>
+                </nav>
+            </div>
+{#        </article>#}
+{#    </div>#}
+</div>
+</body>
+</html>

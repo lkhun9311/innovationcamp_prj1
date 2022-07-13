@@ -6,9 +6,15 @@
     <title>cafejoa</title>
 
     <!--  css 불러오기-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="../static/index_style.css"/>
     <link rel="stylesheet" href="../static/pagination_style.css">
+    <link rel="stylesheet" href="../static/post_cafe_modal_style.css">
+
     <!--    js    -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" charset="utf-8"></script>
@@ -18,8 +24,8 @@
     <script type="text/javascript" src="../static/pagination_test.js"></script>
     <!--카페음악 js분리-->
     <script type="text/javascript" src="../static/cafemusic_js.js"></script>
-
     <!-- Bulma CSS -->
+
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
@@ -41,30 +47,38 @@
             href="{{ url_for('static', filename='cafemusic_style.css') }}"
             rel="stylesheet"
     />
+    {# 삭제 후 alert message #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <script>
+                    alert("{{ message }}")
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </head>
 <body>
-<!--헤더부분-->
-<header class="header">
-    <h1 class="title">
-        CAFE JOA
-    </h1>
+<header class="index_header">
+    <h1 class="header_title">카페조아</h1>
+    <h3 class="header_subtitle">카페에 답이 있다</h3>
+    {#    <span>{{ user_info.username }}님 환영합니다</span>#}
 </header>
-
-<!--모달-->
+<!--카페작성 모달-->
 {% include 'post_cafe_modal.html' %}
 {% include 'cafemusic_modal.html' %}
 {% include 'coffemaking_modal.html' %}
-<!---->
-<!---->
-
+{# 몸통 #}
 <section class="main_page">
-
-    <!---->
     <div class="container">
-        <p>Cafe List</p>
+        {% if user_info.username %}
+            <span class="opening_message">{{ user_info.username }}님 환영합니다</span>
+        {% else %}
+            <span class="opening_message">로그인해주세요</span>
+        {% endif %}
         <div class="add_button">
             <i
-                    class="fa fa-plus"
+                    class="fa fa-pencil"
                     aria-hidden="true"
                     onclick='$("#modal-post").addClass("is-active")'
             ></i>
@@ -72,18 +86,15 @@
         <div class="card-content" style="display: none">
             <!--    카페 후기들 목록 그리드       -->
             {% for cafe in cafes %}
-                <div class="card">
+                <!--    카페 상세페이지 모달      -->
+                {% include 'cafe_detail.html' %}
+                <div class="card" id="{{ cafe._id }}" onclick='$("#{{ cafe._id }}").addClass("is-active")'>
                     <div class="card-image">
-                        {#                    <figure class="image is-4by3">#}
-                        <img src="https://haieng.com/wp-content/uploads/2017/10/test-image-500x500-300x300.jpg"
-                             alt="Placeholder image">
-                        {#                    </figure>#}
+                        <img src="" onerror="this.src='/static/default.jpg'">
                     </div>
-                    <div class="card-summary">
+                    <div class="card_summary">
                         <div class="user_img">
-                            {#                            <figure class="image is-48x48">#}
-                            <img src="https://bulma.io/images/placeholders/48x48.png" alt="Placeholder image">
-                            {#                            </figure>#}
+                            <img src="" onerror="this.src='/static/profile_pics/profile_placeholder.png'">
                         </div>
                         <div class="cafe_info">
                             <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
@@ -92,9 +103,6 @@
                     </div>
                 </div>
             {% endfor %}
-
-
-
             {# 페이지네이션 #}
         </div>
         <div class="pagination">
@@ -107,34 +115,33 @@
             <li class="page-item current-page"><a class="page-link" href="#">10</a></li>
             <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
         </div>
-
-        <!-- Cafe Muscic Part -->
-        <hr>
-        <p>Cafe Music</p>
-        <div class="add_button">
-            <i
-                    class="fa fa-plus"
-                    aria-hidden="true"
-                    onclick='$("#modal-post2").addClass("is-active")'
-            ></i>
-        </div>
-        <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box2"></div>
-    </div>
-        <!-- Coffee Making Part -->
-        <hr>
-        <p>Coffee Making</p>
-        <div class="add_button">
-            <i
-                    class="fa fa-plus"
-                    aria-hidden="true"
-                    onclick='$("#modal-post3").addClass("is-active")'
-            ></i>
-        </div>
-        <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box3"></div>
-    </div>
     </div>
 </section>
+<!-- Cafe Music Part -->
+<hr>
+<p>Cafe Music</p>
+<div class="add_button">
+    <i
+            class="fa fa-plus"
+            aria-hidden="true"
+            onclick='$("#modal-post2").addClass("is-active")'
+    ></i>
+</div>
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box2"></div>
+</div>
+<!-- Coffee Making Part -->
+<hr>
+<p>Coffee Making</p>
+<div class="add_button">
+    <i
+            class="fa fa-plus"
+            aria-hidden="true"
+            onclick='$("#modal-post3").addClass("is-active")'
+    ></i>
+</div>
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box3"></div>
+</div>
 </body>
 </html>
