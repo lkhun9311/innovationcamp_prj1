@@ -27,12 +27,13 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-
+        user_info = db.users.find_one({"username": payload["id"]})
         cafes = list(db.cafes.find({}, {'id': False}))
-        print(cafes)
+        reversed_cafes = cafes[::-1]
         print(len(cafes))
+        print(user_info)
 
-        return render_template('index.html', cafes=cafes)
+        return render_template('index.html', cafes=reversed_cafes, user_info=user_info)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
