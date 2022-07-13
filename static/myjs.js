@@ -33,19 +33,20 @@ function post() {
         processData: false,
         success: function (response) {
             $("#modal-post").removeClass("is-active")
-            window.location.reload()
+            console.log(response["id"])
+            // window.location.reload()
         }
     })
 }
 
-function get_cafes(username) {
+function get_cafes(username,number) {
     $("#card-box").empty()
     if (username == undefined) {
         username = ""
     }
     $.ajax({
         type: "GET",
-        url: `/get/cafes`,
+        url: `/get/cafes?number=${number}`,
         data: {},
         success: function (response) {
             if (response["result"] == "success") {
