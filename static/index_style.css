@@ -101,3 +101,31 @@ a {
     padding-bottom: 10px;
 
 }
+
+/*cafe music css part*/
+.add_button2{
+    bottom: 10vh;
+    right: 10vh;
+    position: fixed;
+    width: 100px;
+    height: 70px;
+    background-color: #876445;
+    display : flex;
+    justify-content: center;
+    align-items : center;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgb(1 1 1 / 10%);
+
+}
+.add_button2:hover{
+    transform: scale(0.95);
+    transition: 0.3s ease;
+}
+.add_button2 i {
+    color: #F4DFBA;
+    font-size: 50px;
+}
+.cafemusic{
+    font-family: 'Stylish', sans-serif;
+    color: #876445 !important;
+}

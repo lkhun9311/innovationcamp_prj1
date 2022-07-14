@@ -340,7 +340,6 @@ def cafemusic_post():
             'author': author
         }
         db.cafemusic.insert_one(doc)
-        # return render_template('index.html', user_info=user_info, status=status), jsonify({"result": "success", 'msg': 'cafe music 등록 완료'})
         return jsonify({"result": "success", 'msg': 'cafe music 포스팅 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
@@ -349,6 +348,16 @@ def cafemusic_post():
 def cafemusic_get():
     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
     return jsonify({'cafemusic_list': cafemusic_list})
+
+@app.route("/mycafemusic/accept", methods=["GET"])
+def mycafemusic_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]},{'_id':False}))
+        return jsonify({'mycafemusic_list': mycafemusic_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
