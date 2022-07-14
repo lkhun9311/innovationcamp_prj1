@@ -51,12 +51,17 @@
                     <a href="/cafe/update?cafe_id={{ cafe._id }}" class="card-footer-item">Edit</a>
                     <a href="/cafe/delete?cafe_id={{ cafe._id }}" class="card-footer-item">Delete</a>
                 {% endif %}
-                <a class="level-item is-sparta card-footer-item" aria-label="heart" onclick="toggle_like('', 'heart')">
+                <a class="level-item is-sparta card-footer-item" aria-label="heart" onclick="toggle_like('{{ cafe._id }}', 'heart')">
                     <span class="icon is-small">
-                        <i class="fa fa-heart" aria-hidden="true"></i>
+                        <i class="fa {% if cafe.heart_by_me %}
+                        fa-heart
+                        {% else %}
+                        fa-heart-o
+                        {% endif %} " aria-hidden="true"></i>
+
                     </span>
                     &nbsp;
-                    <span class="like-num">2.7k</span>
+                    <span class="like-num">{{ cafe.count_heart }}</span>
                 </a>
             </footer>
         </div>
