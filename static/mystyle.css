@@ -12,6 +12,10 @@
     margin-bottom: 0em;
 }
 
+#modal-post > div.modal-content > div > article > div .file {
+    margin: 10px 0px 0px 0px;
+}
+
 #modal-post > div.modal-content > div > article > div .control {
     margin: 10px 0px 0px 0px;
 }
@@ -22,4 +26,8 @@
 
 .main_detail_footer {
     justify-content: end;
+}
+
+.font_gamja_cursive {
+    font-family: 'Gamja Flower', cursive;
 }
