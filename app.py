@@ -322,8 +322,6 @@ def cafemusic_post():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # status = (username == payload["id"])
-        # user_info = db.users.find_one({"username": username}, {"_id": False})
         username = payload["id"]
 
         url_receive = request.form['url_give']
@@ -342,84 +340,24 @@ def cafemusic_post():
             'author': author
         }
         db.cafemusic.insert_one(doc)
-        # return render_template('index.html', user_info=user_info, status=status), jsonify({"result": "success", 'msg': 'cafe music 등록 완료'})
         return jsonify({"result": "success", 'msg': 'cafe music 포스팅 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
-# @app.route("/cafemusic", methods=["POST"])
-# def cafemusic_post(username):
-#     url_receive = request.form['url_give']
-#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
-#     video = pafy.new(url_receive)
-#     title = video.title
-#     view = video.viewcount
-#     author = video.author
-#     print(title, view, author)
-#     doc={
-#         'username': username,
-#         'embed': embed,
-#         'url': url_receive,
-#         'title': title,
-#         'view': view,
-#         'author': author
-#     }
-#     db.music.insert_one(doc)
-#
-#     return jsonify({'msg':'노래 일기 기록 완료'})
 
 @app.route("/cafemusic/accept", methods=["GET"])
 def cafemusic_get():
     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
     return jsonify({'cafemusic_list': cafemusic_list})
 
-# @app.route("/cafemusic/accept/<username>", methods=["GET"])
-# def music_fun():
-#     cafemusic_list = list(db.cafemusic.find({'username': payload["id"]}, {'_id': False}))
-#     return jsonify({'cafemusic_list': cafemusic_list})
-
-# @app.route("/cafemusic/accept/<username>", methods=["GET"])
-# def cafemusic_accept(username):
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         username = payload["id"]
-#         cafemusic_list = list(db.cafemusic.find({'username': username}, {'_id': False}))
-#         return jsonify({"result": "success", "cafemusic_list": cafemusic_list})
-#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-#         return redirect(url_for("home"))
-
-# @app.route("/cafemusic/accept", methods=["GET"])
-# def cafemusic_user_accept():
-#     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
-#     return jsonify({"result": "success", 'cafemusic_list': cafemusic_list})
-
-# @app.route("/music", methods=["POST"])
-# def music_post():
-#     url_receive = request.form['url_give']
-#     cate_receive = request.form['cate_give']
-#     comment_receive = request.form['comment_give']
-#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
-#     video = pafy.new(url_receive)
-#     title = video.title
-#     view = video.viewcount
-#     author = video.author
-#     print(title, view, author)
-#     doc={
-#         'embed':embed,
-#         'url':url_receive,
-#         'title':title,
-#         'view':view,
-#         'author':author
-#     }
-#     db.cafemusic.insert_one(doc)
-#
-#     return jsonify({'msg': 'cafe music 등록 완료'})
-#
-# @app.route("/music", methods=["GET"])
-# def music_get():
-#     music_list = list(db.cafemusic.find({}, {'_id': False}))
-#     return jsonify({'music_list':music_list})
+@app.route("/mycafemusic/accept", methods=["GET"])
+def mycafemusic_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]},{'_id':False}))
+        return jsonify({'mycafemusic_list': mycafemusic_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
