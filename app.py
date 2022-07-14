@@ -22,6 +22,7 @@ client = MongoClient('mongodb+srv://test:dpfehfkeh11!@cluster0.zykagbk.mongodb.n
                      username="test", password="dpfehfkeh11!")
 db = client.cafejoa
 
+
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -29,9 +30,13 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"username": payload["id"]})
         cafes = list(db.cafes.find({}, {'id': False}))
+        for cafe in cafes:
+            cafe["_id"] = str(cafe["_id"])
+            cafe["count_heart"] = db.likes.count_documents({"cafe_id": cafe["_id"], "type": "heart"})
+            cafe["count_heart"] = num2str(cafe["count_heart"])
+            cafe["heart_by_me"] = bool(
+                db.likes.find_one({"cafe_id": cafe["_id"], "type": "heart", "username": payload['id']}))
         reversed_cafes = cafes[::-1]
-        print(len(cafes))
-        print(user_info)
 
         return render_template('index.html', cafes=reversed_cafes, user_info=user_info)
     except jwt.ExpiredSignatureError:
@@ -39,10 +44,12 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
+
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -67,6 +74,7 @@ def sign_in():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
+
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
     username_receive = request.form['username_give']
@@ -89,11 +97,13 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
+
 @app.route('/sign_up/check_up', methods=['POST'])
 def check_up():
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 @app.route('/user/<username>')
 def user(username):
@@ -106,6 +116,7 @@ def user(username):
         return render_template('user.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route('/update_profile', methods=['POST'])
 def save_img():
@@ -130,6 +141,7 @@ def save_img():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+
 @app.route('/user/<username>/resign', methods=['POST'])
 def resign_user(username):
     token_receive = request.cookies.get('mytoken')
@@ -140,6 +152,7 @@ def resign_user(username):
         return jsonify({"result": "success", 'msg': '회원탈퇴 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route('/postingCafe', methods=['POST'])
 def posting():
@@ -191,6 +204,7 @@ def posting():
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route("/get/cafes", methods=['GET'])
 def get_cafes():
@@ -293,29 +307,30 @@ def cafe_delete():
         return redirect(url_for("home"))
 
 
-# @app.route('/update_like', methods=['POST'])
-# def update_like():
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         # 좋아요 수 변경
-#         user_info = db.users.find_one({"username": payload["id"]})
-#         post_id_receive = request.form["post_id_give"]
-#         type_receive = request.form["type_give"]
-#         action_receive = request.form["action_give"]
-#         doc = {
-#             "post_id": post_id_receive,
-#             "username": user_info["username"],
-#             "type": type_receive
-#         }
-#         if action_receive == "like":
-#             db.likes.insert_one(doc)
-#         else:
-#             db.likes.delete_one(doc)
-#         count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
-#         return jsonify({"result": "success", 'msg': 'updated', "count": count})
-#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-#         return redirect(url_for("home"))
+@app.route('/update_like', methods=['POST'])
+def update_like():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
+        user_info = db.users.find_one({"username": payload["id"]})
+        cafe_id_receive = request.form["cafe_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "cafe_id": cafe_id_receive,
+            "username": user_info["username"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+        count = db.likes.count_documents({"cafe_id": cafe_id_receive, "type": type_receive})
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 @app.route("/cafemusic/accept", methods=["POST"])
 def cafemusic_post():
@@ -344,20 +359,23 @@ def cafemusic_post():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+
 @app.route("/cafemusic/accept", methods=["GET"])
 def cafemusic_get():
     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
     return jsonify({'cafemusic_list': cafemusic_list})
+
 
 @app.route("/mycafemusic/accept", methods=["GET"])
 def mycafemusic_get():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]},{'_id':False}))
+        mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]}, {'_id': False}))
         return jsonify({'mycafemusic_list': mycafemusic_list})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 @app.route("/mycafe/accept", methods=["GET"])
 def mycafe_get():
@@ -370,6 +388,17 @@ def mycafe_get():
         return jsonify({'mycafe_list': mycafe_list})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+
+def num2str(count):
+    if count > 10000:
+        return str(count / 1000) + "k"
+    if count > 500:
+        return str(count / 100) / 10 + "k"
+    if count == 0:
+        return ""
+    return count
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
