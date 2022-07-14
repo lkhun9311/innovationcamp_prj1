@@ -47,7 +47,7 @@ a {
     font-weight: bold;
 }
 .add_button{
-    bottom: 10vh;
+    bottom: 19vh;
     right: 10vh;
     position: fixed;
     width: 100px;
@@ -98,6 +98,7 @@ a {
 .add_button2{
     bottom: 10vh;
     right: 10vh;
+    position: fixed;
     width: 100px;
     height: 70px;
     background-color: #876445;
