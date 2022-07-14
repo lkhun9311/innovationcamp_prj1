@@ -62,9 +62,10 @@
 </head>
 <body>
 <header class="index_header">
-    <h1 class="header_title">카페조아</h1>
+    <a class="go_home" href="/">
+        <h1 class="header_title">카페조아</h1>
+    </a>
     <h3 class="header_subtitle">{{ user_info.username }}님 환영합니다</h3>
-    {# <span>{{ user_info.username }}님 환영합니다</span>#}
 </header>
 <!--카페작성 모달-->
 {% include 'post_cafe_modal.html' %}
@@ -100,11 +101,7 @@
     </div>
     <div class="container">
         <div class="opening_message_container">
-            {% if user_info.username %}
-            <span class="opening_message">{{ user_info.username }}님 환영합니다</span>
-            {% else %}
-            <span class="opening_message">로그인해주세요</span>
-            {% endif %}
+            <h3 class="mid_title">Cafe</h3>
         </div>
 
         <div class="card-content" style="display: none">
@@ -142,7 +139,7 @@
 
         <!-- 카페 음악 body -->
         <hr>
-        <p>Cafe Music</p>
+        <h3 class="mid_title">Cafe Music</h3>
 
         <div class="mycards">
             <div  id="cards-box2"></div>
