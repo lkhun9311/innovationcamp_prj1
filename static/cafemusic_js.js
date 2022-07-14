@@ -53,12 +53,12 @@ function cafemusic_get() {
                 let embed = rows[i]['embed']
                 let author = rows[i]['author']
                 let temp_html = `<div class="col">
-                                       <div class="card h-100">
+                                       <div class="card h-100" style="height: 275px">
                                         <iframe width="100%"  src="${embed}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
-                <p><i class="fa fa-youtube-play" aria-hidden="true"></i><span>${view}</span></p>
-                <p><i class="fa fa-user" aria-hidden="true"></i><span>${author}</span></p>
+                <p><i class="fa fa-youtube-play" aria-hidden="true"></i> &nbsp <span>${view}</span></p>
+                <p><i class="fa fa-user" aria-hidden="true"></i> &nbsp <span>${author}</span></p>
                 </div>
         </div>
     </div>`
