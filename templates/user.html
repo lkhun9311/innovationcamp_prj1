@@ -17,6 +17,7 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pagination_style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='user_style.css') }}" rel="stylesheet">
 
     <!-- JS -->
@@ -124,11 +125,27 @@
 <section class="card-style">
     <div class="container">
         <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe</p>
+        {% for mycafe in mycafes %}
+        <div class="mycards">
+            <div class="row row-cols-1 row-cols-md-4 g-4 cafemusic" id="cards-box1" style="width: 300px">
+                <div class="card-image">
+                    <img onerror="this.src='/static/default.jpg'" src="/static/{{ mycafe.cafe_image_pic_real }}">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">&nbsp<i class="fa fa-coffee" aria-hidden="true"></i>&nbsp{{ mycafe.cafe_name }}</h5>
+                    <p>&nbsp&nbsp<i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp <span>{{ mycafe.cafe_address }}</span>
+                    </p>
+                    <p>&nbsp&nbsp<i class="fa fa-phone" aria-hidden="true"></i>&nbsp
+                        <span>{{ mycafe.cafe_tel }}</span></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </section>
 <section class="card-style">
     <div class="container">
-        <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe Music</p>
+        <p class="subtitle">{{ user_info.profile_name }}'s Cafe Music</p>
         <div class="mycards">
             <div class="row row-cols-1 row-cols-md-4 g-4 cafemusic" id="cards-box2" style="width: 300px"></div>
         </div>

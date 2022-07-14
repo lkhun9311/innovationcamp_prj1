@@ -103,7 +103,9 @@ def user(username):
         status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
         user_info = db.users.find_one({"username": username}, {"_id": False})
-        return render_template('user.html', user_info=user_info, status=status)
+        mycafe_list = list(db.cafes.find({'username': payload["id"]}, {'_id': False}))
+        reversed_mycafe = mycafe_list[::-1]
+        return render_template('user.html', user_info=user_info, mycafes=reversed_mycafe, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
@@ -356,18 +358,6 @@ def mycafemusic_get():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]},{'_id':False}))
         return jsonify({'mycafemusic_list': mycafemusic_list})
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
-
-@app.route("/mycafe/accept", methods=["GET"])
-def mycafe_get():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        mycafe_list = list(db.cafes.find({'username': payload["id"]}, {'_id': False}))
-        print("여기")
-        print(mycafe_list)
-        return jsonify({'mycafe_list': mycafe_list})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
