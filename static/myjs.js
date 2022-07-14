@@ -3,6 +3,14 @@ $(function () {
     // 모달 창에 이미지 파일 삽입되면 감지하는 이벤트 리스너
     $('#input-pic').on("change", function (event) {
         // 이미지 미리보기도 가능
+        var file = event.target.files[0];
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $("#preview").attr("src", e.target.result);
+        }
+        reader.readAsDataURL(file);
+
         $('#file-name').removeClass('is-hidden')
         // console.log(event.target.files[0]) // file check
         $('#file-name').text(event.target.files[0]["name"])
