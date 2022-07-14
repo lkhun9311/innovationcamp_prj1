@@ -359,5 +359,17 @@ def mycafemusic_get():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+@app.route("/mycafe/accept", methods=["GET"])
+def mycafe_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mycafe_list = list(db.cafes.find({'username': payload["id"]}, {'_id': False}))
+        print("여기")
+        print(mycafe_list)
+        return jsonify({'mycafe_list': mycafe_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
