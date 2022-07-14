@@ -83,8 +83,8 @@ def sign_up():
         "gender": gender_receive,  # 유저 성별
         "age": age_receive,  # 유저 나이
         "profile_name": username_receive,  # 프로필 이름 기본값은 유저 아이디
-        "profile_pic": "",  # 프로필 사진 파일 이름
-        "profile_pic_default": "profile_pics/profile_placeholder.png"  # 프로필 사진 기본 이미지
+        "profile_pic": "profile_placeholder.png",  # 프로필 사진 파일 이름
+        "profile_pic_real": "profile_pics/profile_placeholder.png"  # 프로필 사진 real path
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -124,7 +124,7 @@ def save_img():
             file_path = f"profile_pics/{username}.{extension}"
             file.save("./static/" + file_path)
             new_doc["profile_pic"] = filename
-            new_doc["profile_pic_default"] = file_path
+            new_doc["profile_pic_real"] = file_path
         db.users.update_one({'username': payload['id']}, {'$set': new_doc})
         return jsonify({"result": "success", 'msg': '프로필 수정 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -171,8 +171,8 @@ def posting():
         cafe_image_name = insert_one._InsertOneResult__inserted_id
 
         img_doc = {
-            "cafe_image_pic": "",  # 카페 이미지
-            "cafe_image_pic_real": "",  # 카페 이미지 path
+            "cafe_image_pic": "default.jpg",  # 카페 이미지
+            "cafe_image_pic_real": "default.jpg",  # 카페 이미지 path
         }
         # 카페 이미지 파일 존재시 처리
         if 'cafeimage_give' in request.files:

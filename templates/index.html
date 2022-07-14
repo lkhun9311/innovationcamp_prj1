@@ -114,11 +114,11 @@
             {% include 'cafe_detail.html' %}
             <div class="card" id="{{ cafe._id }}" onclick='$("#{{ cafe._id }}").addClass("is-active")'>
                 <div class="card-image">
-                    <img onerror="this.src='/static/default.jpg'" src="">
+                    <img onerror="this.src='/static/default.jpg'" src="/static/{{ cafe.cafe_image_pic_real }}">
                 </div>
                 <div class="card_summary">
                     <div class="user_img">
-                        <img onerror="this.src='/static/profile_pics/profile_placeholder.png'" src="">
+                        <img onerror="this.src='/static/profile_pics/profile_placeholder.png'" src="/static/{{ cafe.profile_pic_real }}">
                     </div>
                     <div class="cafe_info">
                         <p class="cafe_title_info">{{ cafe.cafe_name }}</p>
