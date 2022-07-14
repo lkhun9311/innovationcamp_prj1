@@ -19,6 +19,8 @@
     <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='pagination_style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='user_style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='cafemusic_style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='index_style.css') }}" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -36,10 +38,10 @@
                 </a>
             </figure>
             <div class="media-content">
-                <div class="content">
-                    <p class="cafejoa" style="margin: 35px 0px 0px 10px">
-                        <strong id="userrealname">{{ user_info.userrealname }}</strong>
-                        <small>@{{ user_info.profile_name }}</small>
+                <div>
+                    <p class="cafejoa" >
+                        <h4 class="user_info" id="userrealname">{{ user_info.userrealname }}</h4>
+                        <h4 class="user_info">@{{ user_info.profile_name }}</h4>
                     </p>
                 </div>
 
@@ -122,16 +124,16 @@
         </div>
     </div>
 </section>
-<section class="card-style">
-    <div class="container">
-        <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe</p>
+{# 카페 #}
+<section class="main_page">
+    <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe</p>
+    <div class="cafemusic_container">
         {% for mycafe in mycafes %}
-        <div class="mycards">
-            <div class="row row-cols-1 row-cols-md-4 g-4 cafemusic" id="cards-box1" style="width: 300px">
+            <div class="card" id="cards-box1" style="width: 300px">
                 <div class="card-image">
                     <img onerror="this.src='/static/default.jpg'" src="/static/{{ mycafe.cafe_image_pic_real }}">
                 </div>
-                <div class="card-body">
+                <div class="cafemusic_summary">
                     <h5 class="card-title">&nbsp<i class="fa fa-coffee" aria-hidden="true"></i>&nbsp{{ mycafe.cafe_name }}</h5>
                     <p>&nbsp&nbsp<i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp <span>{{ mycafe.cafe_address }}</span>
                     </p>
@@ -139,17 +141,15 @@
                         <span>{{ mycafe.cafe_tel }}</span></p>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </section>
-<section class="card-style">
-    <div class="container">
-        <p class="subtitle">{{ user_info.profile_name }}'s Cafe Music</p>
+{# 유튜브 #}
+<section class="main_page">
+    <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe Music</p>
         <div class="mycards">
-            <div class="row row-cols-1 row-cols-md-4 g-4 cafemusic" id="cards-box2" style="width: 300px"></div>
+            <div  id="cards-box2" ></div>
         </div>
-    </div>
 </section>
 <a href="javascript:history.back();" class="add_button"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a>
 </html>

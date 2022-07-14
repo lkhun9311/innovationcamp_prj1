@@ -2,8 +2,8 @@
     padding: 20px;
     width: 600px;
     max-width: 80%;
-    height: 1000px;
 }
+
 .modal-content::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
@@ -30,4 +30,8 @@
 
 .font_gamja_cursive {
     font-family: 'Gamja Flower', cursive;
+
+.draw_line img{
+    height: 300px;
+
 }

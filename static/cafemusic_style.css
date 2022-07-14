@@ -7,7 +7,6 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    padding: 0 40px;
 }
 .col{
     padding: 5px 5px 10px 5px;
@@ -21,4 +20,17 @@
     align-items: center;
     /*justify-content: center;*/
     /*background-color: blue;*/
+}
+.cafemusic_container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, auto));
+
+}
+.cafemusic_summary{
+    padding: 5px;
+}
+.user_info{
+    color: #876445;
+    font-size: 1.6rem;
+    font-weight: bold;
 }

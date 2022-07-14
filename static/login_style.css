@@ -19,8 +19,8 @@ body {
 
 .subtitle {
     font-size: 2rem;
-
-    font-family: 'Stylish', sans-serif;
+    font-family: 'Gamja Flower', sans-serif;
+    font-weight: bold;
 }
 
 .cafejoa {
@@ -49,6 +49,6 @@ body {
 }
 
 .cafemusic{
-    font-family: 'Stylish', sans-serif;
+    font-family: 'Gamja Flower', sans-serif;
     color: #876445 !important;
 }
