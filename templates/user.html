@@ -3,7 +3,7 @@
 <head>
 
     <!-- Webpage Title -->
-    <title>카페조아</title>
+    <title>cafejoa</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -31,7 +31,7 @@
             <figure class="media-left" style="align-self: center">
                 <a class="image" href="#">
                     <img class="is-rounded image is-96x96"
-                         src="{{ url_for('static', filename=user_info.profile_pic_default) }}">
+                         src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
                 </a>
             </figure>
             <div class="media-content">
@@ -121,9 +121,18 @@
         </div>
     </div>
 </section>
-<section>
-    <div>
+<section class="card-style">
+    <div class="container">
         <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe</p>
     </div>
 </section>
+<section class="card-style">
+    <div class="container">
+        <p class="subtitle cafejoa mycafe">{{ user_info.profile_name }}'s Cafe Music</p>
+        <div class="mycards">
+            <div class="row row-cols-1 row-cols-md-4 g-4 cafemusic" id="cards-box2" style="width: 300px"></div>
+        </div>
+    </div>
+</section>
+<a href="javascript:history.back();" class="add_button"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a>
 </html>

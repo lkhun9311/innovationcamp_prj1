@@ -83,8 +83,8 @@ def sign_up():
         "gender": gender_receive,  # 유저 성별
         "age": age_receive,  # 유저 나이
         "profile_name": username_receive,  # 프로필 이름 기본값은 유저 아이디
-        "profile_pic": "",  # 프로필 사진 파일 이름
-        "profile_pic_default": "profile_pics/profile_placeholder.png"  # 프로필 사진 기본 이미지
+        "profile_pic": "profile_placeholder.png",  # 프로필 사진 파일 이름
+        "profile_pic_real": "profile_pics/profile_placeholder.png"  # 프로필 사진 real path
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -124,7 +124,7 @@ def save_img():
             file_path = f"profile_pics/{username}.{extension}"
             file.save("./static/" + file_path)
             new_doc["profile_pic"] = filename
-            new_doc["profile_pic_default"] = file_path
+            new_doc["profile_pic_real"] = file_path
         db.users.update_one({'username': payload['id']}, {'$set': new_doc})
         return jsonify({"result": "success", 'msg': '프로필 수정 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -171,8 +171,8 @@ def posting():
         cafe_image_name = insert_one._InsertOneResult__inserted_id
 
         img_doc = {
-            "cafe_image_pic": "",  # 카페 이미지
-            "cafe_image_pic_real": "",  # 카페 이미지 path
+            "cafe_image_pic": "default.jpg",  # 카페 이미지
+            "cafe_image_pic_real": "default.jpg",  # 카페 이미지 path
         }
         # 카페 이미지 파일 존재시 처리
         if 'cafeimage_give' in request.files:
@@ -322,8 +322,6 @@ def cafemusic_post():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # status = (username == payload["id"])
-        # user_info = db.users.find_one({"username": username}, {"_id": False})
         username = payload["id"]
 
         url_receive = request.form['url_give']
@@ -342,84 +340,36 @@ def cafemusic_post():
             'author': author
         }
         db.cafemusic.insert_one(doc)
-        # return render_template('index.html', user_info=user_info, status=status), jsonify({"result": "success", 'msg': 'cafe music 등록 완료'})
         return jsonify({"result": "success", 'msg': 'cafe music 포스팅 완료'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
-# @app.route("/cafemusic", methods=["POST"])
-# def cafemusic_post(username):
-#     url_receive = request.form['url_give']
-#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
-#     video = pafy.new(url_receive)
-#     title = video.title
-#     view = video.viewcount
-#     author = video.author
-#     print(title, view, author)
-#     doc={
-#         'username': username,
-#         'embed': embed,
-#         'url': url_receive,
-#         'title': title,
-#         'view': view,
-#         'author': author
-#     }
-#     db.music.insert_one(doc)
-#
-#     return jsonify({'msg':'노래 일기 기록 완료'})
 
 @app.route("/cafemusic/accept", methods=["GET"])
 def cafemusic_get():
     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
     return jsonify({'cafemusic_list': cafemusic_list})
 
-# @app.route("/cafemusic/accept/<username>", methods=["GET"])
-# def music_fun():
-#     cafemusic_list = list(db.cafemusic.find({'username': payload["id"]}, {'_id': False}))
-#     return jsonify({'cafemusic_list': cafemusic_list})
+@app.route("/mycafemusic/accept", methods=["GET"])
+def mycafemusic_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mycafemusic_list = list(db.cafemusic.find({'username': payload["id"]},{'_id':False}))
+        return jsonify({'mycafemusic_list': mycafemusic_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
-# @app.route("/cafemusic/accept/<username>", methods=["GET"])
-# def cafemusic_accept(username):
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         username = payload["id"]
-#         cafemusic_list = list(db.cafemusic.find({'username': username}, {'_id': False}))
-#         return jsonify({"result": "success", "cafemusic_list": cafemusic_list})
-#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-#         return redirect(url_for("home"))
-
-# @app.route("/cafemusic/accept", methods=["GET"])
-# def cafemusic_user_accept():
-#     cafemusic_list = list(db.cafemusic.find({}, {'_id': False}))
-#     return jsonify({"result": "success", 'cafemusic_list': cafemusic_list})
-
-# @app.route("/music", methods=["POST"])
-# def music_post():
-#     url_receive = request.form['url_give']
-#     cate_receive = request.form['cate_give']
-#     comment_receive = request.form['comment_give']
-#     embed = url_receive.replace(url_receive.split('/')[-1][0:8], 'embed/')
-#     video = pafy.new(url_receive)
-#     title = video.title
-#     view = video.viewcount
-#     author = video.author
-#     print(title, view, author)
-#     doc={
-#         'embed':embed,
-#         'url':url_receive,
-#         'title':title,
-#         'view':view,
-#         'author':author
-#     }
-#     db.cafemusic.insert_one(doc)
-#
-#     return jsonify({'msg': 'cafe music 등록 완료'})
-#
-# @app.route("/music", methods=["GET"])
-# def music_get():
-#     music_list = list(db.cafemusic.find({}, {'_id': False}))
-#     return jsonify({'music_list':music_list})
+@app.route("/mycafe/accept", methods=["GET"])
+def mycafe_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mycafe_list = list(db.cafes.find({'username': payload["id"]}, {'_id': False}))
+        print("여기")
+        print(mycafe_list)
+        return jsonify({'mycafe_list': mycafe_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
