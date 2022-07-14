@@ -37,12 +37,17 @@ a {
 .main_page{
     margin: 0 auto;
     width: 90%;
+    padding-bottom: 5%;
+
     /*height: 100%;*/
     /*border: 1px solid black;*/
 }
+.opening_message_container{
+    padding: 20px;
+}
 .opening_message{
-    position: absolute;
-    top: 20px;
+    /*position: absolute;*/
+    /*top: 20px;*/
     font-size: 20px;
     font-weight: bold;
 }

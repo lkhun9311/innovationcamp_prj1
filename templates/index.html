@@ -74,11 +74,13 @@
 
 <section class="main_page">
     <div class="container">
-        {% if user_info.username %}
-        <span class="opening_message">{{ user_info.username }}님 환영합니다</span>
-        {% else %}
-        <span class="opening_message">로그인해주세요</span>
-        {% endif %}
+        <div class="opening_message_container">
+            {% if user_info.username %}
+            <span class="opening_message">{{ user_info.username }}님 환영합니다</span>
+            {% else %}
+            <span class="opening_message">로그인해주세요</span>
+            {% endif %}
+        </div>
         <div class="add_button">
             <i
                     aria-hidden="true"
@@ -130,7 +132,7 @@
             ></i>
         </div>
         <div class="mycards">
-            <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box2"></div>
+            <div class="card-content" id="cards-box2"></div>
         </div>
     </div>
 </section>
