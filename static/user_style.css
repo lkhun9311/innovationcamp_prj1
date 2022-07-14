@@ -1,9 +1,13 @@
+body{
+    width: 100%;
+    height: 100%;
+}
+
 .mycafe{
     margin: 20px 0px 20px 100px;
 }
 
 .card-style{
     background-color: #f4dfba;
-    width: 100%;
-    height: 25vw;
+    height: 45vh;
 }
