@@ -34,11 +34,11 @@
 
 - 팀원
   
-  - 이광훈
+  - 이광훈 - [GitHub](https://github.com/lkhun9311)
   
   - 이동욱 - [GitHub](https://github.com/Moveuk?tab=repositories) [dev blog](https://dul2.tistory.com/)
   
-  - 이석준
+  - 이석준 - [GitHub](https://github.com/Seokjun7074)
 
 
 
